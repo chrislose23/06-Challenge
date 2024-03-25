@@ -22,7 +22,7 @@ THEN I am again presented with current and future conditions for that city
 
 ## Mock-Up
 
-![alt-Text](./Assets/images/mockup.png)
+![alt-Text](./assets/images/mockup.png)
 
 ## Important
 
