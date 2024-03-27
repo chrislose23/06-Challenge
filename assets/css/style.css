@@ -20,3 +20,15 @@ main {
 #searchBtn {
     width: 350px;
 }
+
+hr {
+    width: 350px;
+}
+
+#activeCity {
+    border: 1px black solid;
+}
+
+#active5Day {
+    border: 1px black solid;
+}
