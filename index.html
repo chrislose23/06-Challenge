@@ -11,24 +11,27 @@
     <header>
         <h1>Weather Dashboard</h1>
     </header>
+    <section>
+        <aside>
+            <h2>Search for a city:</h2>
+            <div>
+                <form class="d-flex flex-column">
+                    <div id="searchBarDiv" class="mb-3">
+                        <input id="searchBar" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    </div>
+                    <div id="searchBtnDiv">
+                        <button id="searchBtn" class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+        </aside>
+    
 
-    <aside>
-        <h2>Search for a city:</h2>
-        <div>
-            <form class="d-flex flex-column">
-                <div id="searchBarDiv" class="mb-3">
-                    <input id="searchBar" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                </div>
-                <div id="searchBtnDiv">
-                    <button id="searchBtn" class="btn btn-primary" type="submit">Search</button>
-                </div>
-            </form>
-        </div>
-    </aside>
-
-    <main>
-        <div></div>
-    </main>
+        <main>
+            <div>Current City</div>
+            <div>5 day forcast</div>
+        </main>
+    </section>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./assets/js/script.js"></script>

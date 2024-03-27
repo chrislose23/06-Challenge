@@ -1,3 +1,18 @@
+section {
+    display: flex;
+    justify-content: space-between;
+}
+
+aside {
+    border: 1px black solid;
+    flex-shrink: 0;
+}
+
+main {
+    border: 1px black solid;
+    flex-grow: 1;
+}
+
 #searchBar {
     width: 350px;
 }
