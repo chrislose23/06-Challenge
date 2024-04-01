@@ -51,9 +51,9 @@ function getWeather(event) {
 
 function displayCurrentWeather(cityName, data) {
     const temperatureC = data.main.temp;
-    const temperatureF = (temperatureC * 9/5) + 32;
+    const temperatureF = ((temperatureC * 9/5) + 32).toFixed(2);
     const windSpeedMPS = data.wind.speed;
-    const windSpeedMPH = windSpeedMPS * 2.237;
+    const windSpeedMPH = (windSpeedMPS * 2.237).toFixed(2);
     const humidity = data.main.humidity;
 
     const weatherInfo = `
@@ -127,9 +127,9 @@ function displayFiveDayForecast(data) {
             const time = date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
             const description = item.weather[0].description;
             const temperatureC = item.main.temp;
-            const temperatureF = (temperatureC * 9/5) + 32;
+            const temperatureF = ((temperatureC * 9/5) + 32).toFixed(2);
             const windSpeedMPS = item.wind.speed;
-            const windSpeedMPH = windSpeedMPS * 2.237;
+            const windSpeedMPH = (windSpeedMPS * 2.237).toFixed(2);
             const humidity = item.main.humidity;
 
             forecastHTML += `
