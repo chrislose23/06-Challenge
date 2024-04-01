@@ -17,22 +17,14 @@ function getWeather(event) {
             return response.json();
         })
         .then(data => {
-            const temperatureC = data.main.temp;
-            const temperatureF = (temperatureC * 9/5) + 32;
-            const windSpeedMPS = data.wind.speed;
-            const windSpeedMPH = windSpeedMPS * 2.237;
-            const humidity = data.main.humidity;
+            // Display current weather
+            displayCurrentWeather(cityName, data);
 
-            const weatherInfo = `
-                <div id="currentCity">
-                    <h2>Weather in ${cityName}:</h2>
-                    <p>Temperature: ${temperatureF}°F</p>
-                    <p>Wind Speed: ${windSpeedMPH} m/h</p>
-                    <p>Humidity: ${humidity}%</p>
-                </div>
-            `;
-
-            document.getElementById('activeCity').innerHTML = weatherInfo;
+            // Save search to local storage
+            saveToLocalStorage(cityName);
+            
+            // Display recent searches
+            displayRecentSearches();
         })
         .catch(error => {
             console.error('Error fetching current weather data:', error);
@@ -41,25 +33,84 @@ function getWeather(event) {
 
     // Fetch the 5-day forecast data
     fetch(forecastUrl)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('There was a network response error');
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('There was a network response error');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Display 5-day forecast
+            displayFiveDayForecast(data);
+        })
+        .catch(error => {
+            console.error('Error fetching 5-day forecast data:', error);
+            document.getElementById('active5Day').innerHTML = `<p>Error fetching 5-day forecast data: ${error.message}</p>`;
+        });
+}
+
+function displayCurrentWeather(cityName, data) {
+    const temperatureC = data.main.temp;
+    const temperatureF = (temperatureC * 9/5) + 32;
+    const windSpeedMPS = data.wind.speed;
+    const windSpeedMPH = windSpeedMPS * 2.237;
+    const humidity = data.main.humidity;
+
+    const weatherInfo = `
+        <div id="currentCity">
+            <h2>Weather in ${cityName}:</h2>
+            <p>Temperature: ${temperatureF}°F</p>
+            <p>Wind Speed: ${windSpeedMPH} m/h</p>
+            <p>Humidity: ${humidity}%</p>
+        </div>
+    `;
+
+    document.getElementById('activeCity').innerHTML = weatherInfo;
+}
+
+function saveToLocalStorage(cityName) {
+    let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
+
+    // Check if the city is already in recent searches
+    if (!recentSearches.includes(cityName)) {
+        // Add the city to recent searches
+        recentSearches.push(cityName);
+        // Limit recent searches to 5
+        if (recentSearches.length > 5) {
+            recentSearches = recentSearches.slice(-5);
         }
-        return response.json();
-    })
-    .then(data => {
+        // Update local storage
+        localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+    }
+}
 
-        // I sorted forecast data to include only entries at 3:00 PM
-        const forecastData = data.list.filter(item => {
-            
-            const localHour = new Date(item.dt_txt + ' UTC').getUTCHours();
-            const localMinute = new Date(item.dt_txt + ' UTC').getUTCMinutes();
-            // Check  local time to compare to 3:00 PM
-            return localHour === 15 && localMinute === 0;
-        // Take the first 5 entries only
-        }).slice(0, 5);
+function displayRecentSearches() {
+    let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
 
-        let forecastHTML = '';
+    const recentSearchesHTML = recentSearches.map(cityName => `
+        <button class="btn btn-secondary recentSearch" data-city="${cityName}">${cityName}</button><br>
+    `).join('');
+
+    document.getElementById('recent').innerHTML = recentSearchesHTML;
+
+    // Add event listeners to recent search buttons
+    document.querySelectorAll('.recentSearch').forEach(button => {
+        button.addEventListener('click', () => {
+            const cityName = button.dataset.city;
+            document.getElementById('searchBar').value = cityName;
+            getWeather(new Event('submit')); // Trigger search
+        });
+    });
+}
+
+function displayFiveDayForecast(data) {
+    const forecastData = data.list.filter(item => {
+        const localHour = new Date(item.dt_txt + ' UTC').getUTCHours();
+        const localMinute = new Date(item.dt_txt + ' UTC').getUTCMinutes();
+        return localHour === 15 && localMinute === 0;
+    }).slice(0, 5);
+
+    let forecastHTML = '';
 
         forecastData.forEach(item => {
             const date = new Date(item.dt_txt);
@@ -86,14 +137,7 @@ function getWeather(event) {
         // Added the h2 above the forecastHTML
         forecastHTML = '<h2>5-Day Forecast:</h2><br><div id="test">' + forecastHTML + '</div>';
 
-        document.getElementById('active5Day').innerHTML = forecastHTML;
-    })
-    .catch(error => {
-        console.error('Error fetching 5-day forecast data:', error);
-        document.getElementById('active5Day').innerHTML = `<p>Error fetching 5-day forecast data: ${error.message}</p>`;
-    });
-
+    document.getElementById('active5Day').innerHTML = forecastHTML;
 }
 
 document.getElementById('searchBtn').addEventListener('click', getWeather);
-
