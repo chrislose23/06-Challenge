@@ -113,6 +113,24 @@ function displayRecentSearches() {
 window.addEventListener('load', displayRecentSearches);
 
 function displayFiveDayForecast(data) {
+
+    // Added an emoji map
+    const emojiMap = {
+        'clear sky': '☀️',
+        'few clouds': '🌤️',
+        'scattered clouds': '⛅',
+        'broken clouds': '☁️',
+        'overcast clouds': '☁️',
+        'shower rain': '🌧️',
+        'rain': '🌧️',
+        'heavy intensity rain': '🌧️',
+        'light rain': '🌧️',
+        'thunderstorm': '⛈️',
+        'snow': '❄️',
+        'light snow': '❄️',
+        'mist': '🌫️'
+    };
+
     const forecastData = data.list.filter(item => {
         const localHour = new Date(item.dt_txt + ' UTC').getUTCHours();
         const localMinute = new Date(item.dt_txt + ' UTC').getUTCMinutes();
@@ -132,10 +150,12 @@ function displayFiveDayForecast(data) {
             const windSpeedMPH = (windSpeedMPS * 2.237).toFixed(2);
             const humidity = item.main.humidity;
 
+            const emoji = emojiMap[description.toLowerCase()] || '';
+
             forecastHTML += `
                 <div class="fiveDay">
                     <p>${newDate}</p>
-                    <p>${description}</p>
+                    <p>${emoji}</p>
                     <p>Temp: ${temperatureF}°F</p>
                     <p>Wind: ${windSpeedMPH} m/h</p>
                     <p>Humidity: ${humidity}%</p>
