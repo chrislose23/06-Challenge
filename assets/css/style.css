@@ -1,15 +1,19 @@
+header {
+ background-color: darkslateblue;
+ color: white;
+ text-align: center;
+}
+
 section {
     display: flex;
     justify-content: space-between;
 }
 
 aside {
-    border: 1px black solid;
     flex-shrink: 0;
 }
 
 main {
-    border: 1px black solid;
     flex-grow: 1;
 }
 
