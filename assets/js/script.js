@@ -17,15 +17,17 @@ function getWeather(event) {
             return response.json();
         })
         .then(data => {
-            const temperature = data.main.temp;
-            const windSpeed = data.wind.speed;
+            const temperatureC = data.main.temp;
+            const temperatureF = (temperatureC * 9/5) + 32;
+            const windSpeedMPS = data.wind.speed;
+            const windSpeedMPH = windSpeedMPS * 2.237;
             const humidity = data.main.humidity;
 
             const weatherInfo = `
                 <div id="currentCity">
                     <h2>Weather in ${cityName}:</h2>
-                    <p>Temperature: ${temperature}°C</p>
-                    <p>Wind Speed: ${windSpeed} m/s</p>
+                    <p>Temperature: ${temperatureF}°F</p>
+                    <p>Wind Speed: ${windSpeedMPH} m/h</p>
                     <p>Humidity: ${humidity}%</p>
                 </div>
             `;
@@ -46,25 +48,40 @@ function getWeather(event) {
         return response.json();
     })
     .then(data => {
+
+        // Get unique dates from the forecast data
+        const uniqueDates = [...new Set(data.list.map(item => item.dt_txt.substr(0, 10)))];
         
-        const forecastData = data.list.slice(0, 5);
+        // Take the first 5 unique dates
+        const forecastData = data.list.filter(item => uniqueDates.includes(item.dt_txt.substr(0, 10))).slice(0, 5);
+ 
+        
+        // const forecastData = data.list.slice(0, 5);
         let forecastHTML = '';
 
         forecastData.forEach(item => {
-            const date = new Date(item.dt * 1000);
-            const temperature = item.main.temp;
+            const date = new Date(item.dt_txt);
+            const time = date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
             const description = item.weather[0].description;
+            const temperatureC = item.main.temp;
+            const temperatureF = (temperatureC * 9/5) + 32;
+            const windSpeedMPS = item.wind.speed;
+            const windSpeedMPH = windSpeedMPS * 2.237;
+            const humidity = item.main.humidity;
 
             forecastHTML += `
                 <div class="fiveDay">
                     <p>Date: ${date.toDateString()}</p>
-                    <p>Temperature: ${temperature}°C</p>
+                    <p>Time: ${time}</p>
                     <p>Description: ${description}</p>
+                    <p>Temperature: ${temperatureF}°F</p>
+                    <p>Wind Speed: ${windSpeedMPH} m/h</p>
+                    <p>Humidity: ${humidity}%</p>
                 </div>
             `;
         });
 
-        // Add the h2 above the forecastHTML
+        // Added the h2 above the forecastHTML
         forecastHTML = '<h2>5-Day Forecast:</h2><br><div id="test">' + forecastHTML + '</div>';
 
         document.getElementById('active5Day').innerHTML = forecastHTML;
