@@ -25,10 +25,22 @@ hr {
     width: 350px;
 }
 
-#activeCity {
+#currentCity {
     border: 1px black solid;
 }
 
 #active5Day {
     border: 1px black solid;
+    display: flex;
+    flex-wrap: wrap;
 }
+
+.fiveDayFore {
+    flex: 1 0 calc(100% - 10px);
+}
+
+.fiveDay {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+}
+
