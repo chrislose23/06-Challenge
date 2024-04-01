@@ -46,3 +46,10 @@ hr {
     display: flex;
     justify-content: space-around;
 }
+
+.fiveDay {
+    color: white;
+    width: 150px;
+    padding: 5px;
+    background-color: darkslateblue;
+}
