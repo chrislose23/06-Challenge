@@ -1,3 +1,4 @@
+// My API Key
 const apiKey = '5842a6da3b2ee4a199a3f215f476fb35';
 
 function getWeather(event) {
@@ -40,7 +41,6 @@ function getWeather(event) {
             return response.json();
         })
         .then(data => {
-            // Display 5-day forecast
             displayFiveDayForecast(data);
         })
         .catch(error => {
@@ -75,7 +75,7 @@ function saveToLocalStorage(cityName) {
     if (!recentSearches.includes(cityName)) {
         // Add the city to recent searches
         recentSearches.push(cityName);
-        // Limit recent searches to 5
+        // Max recent searches at 5
         if (recentSearches.length > 5) {
             recentSearches = recentSearches.slice(-5);
         }
@@ -84,24 +84,33 @@ function saveToLocalStorage(cityName) {
     }
 }
 
+// Retrieve recent searches from local storage
+function getRecentSearchesFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('recentSearches')) || [];
+}
+
+// Display recent searches
 function displayRecentSearches() {
-    let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
+    const recentSearches = getRecentSearchesFromLocalStorage();
 
     const recentSearchesHTML = recentSearches.map(cityName => `
-        <button class="btn btn-secondary recentSearch" data-city="${cityName}">${cityName}</button><br>
+        <button class="btn btn-secondary recentSearch" data-city="${cityName}">${cityName}</button>
     `).join('');
 
     document.getElementById('recent').innerHTML = recentSearchesHTML;
 
-    // Add event listeners to recent search buttons
+    // Event listeners
     document.querySelectorAll('.recentSearch').forEach(button => {
         button.addEventListener('click', () => {
             const cityName = button.dataset.city;
             document.getElementById('searchBar').value = cityName;
-            getWeather(new Event('submit')); // Trigger search
+            getWeather(new Event('submit'));
         });
     });
 }
+
+// Show Recent Searches when the page loads
+window.addEventListener('load', displayRecentSearches);
 
 function displayFiveDayForecast(data) {
     const forecastData = data.list.filter(item => {

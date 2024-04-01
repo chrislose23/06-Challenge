@@ -21,6 +21,19 @@ main {
     width: 350px;
 }
 
+#recent {
+    display: flex;
+    flex-direction: column;
+}
+
+#recent button {
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+}
+
 hr {
     width: 350px;
 }
