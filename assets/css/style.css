@@ -29,18 +29,7 @@ hr {
     border: 1px black solid;
 }
 
-#active5Day {
-    border: 1px black solid;
+#test {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
 }
-
-.fiveDayFore {
-    flex: 1 0 calc(100% - 10px);
-}
-
-.fiveDay {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-}
-

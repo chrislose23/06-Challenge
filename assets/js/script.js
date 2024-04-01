@@ -39,37 +39,41 @@ function getWeather(event) {
 
     // Fetch 5-day forecast data
     fetch(forecastUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('There was a network response error');
-            }
-            return response.json();
-        })
-        .then(data => {
-            
-            const forecastData = data.list.slice(0, 5);
-            let forecastHTML = '<div class="fiveDayFore"><h2>5-Day Forecast:</h2></div>';
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('There was a network response error');
+        }
+        return response.json();
+    })
+    .then(data => {
+        
+        const forecastData = data.list.slice(0, 5);
+        let forecastHTML = '';
 
-            forecastData.forEach(item => {
-                const date = new Date(item.dt * 1000);
-                const temperature = item.main.temp;
-                const description = item.weather[0].description;
+        forecastData.forEach(item => {
+            const date = new Date(item.dt * 1000);
+            const temperature = item.main.temp;
+            const description = item.weather[0].description;
 
-                forecastHTML += `
-                    <div class="fiveDay">
-                        <p>Date: ${date.toDateString()}</p>
-                        <p>Temperature: ${temperature}°C</p>
-                        <p>Description: ${description}</p>
-                    </div>
-                `;
-            });
-
-            document.getElementById('active5Day').innerHTML = forecastHTML;
-        })
-        .catch(error => {
-            console.error('Error fetching 5-day forecast data:', error);
-            document.getElementById('active5Day').innerHTML = `<p>Error fetching 5-day forecast data: ${error.message}</p>`;
+            forecastHTML += `
+                <div class="fiveDay">
+                    <p>Date: ${date.toDateString()}</p>
+                    <p>Temperature: ${temperature}°C</p>
+                    <p>Description: ${description}</p>
+                </div>
+            `;
         });
+
+        // Add the h2 above the forecastHTML
+        forecastHTML = '<h2>5-Day Forecast:</h2><br><div id="test">' + forecastHTML + '</div>';
+
+        document.getElementById('active5Day').innerHTML = forecastHTML;
+    })
+    .catch(error => {
+        console.error('Error fetching 5-day forecast data:', error);
+        document.getElementById('active5Day').innerHTML = `<p>Error fetching 5-day forecast data: ${error.message}</p>`;
+    });
+
 }
 
 document.getElementById('searchBtn').addEventListener('click', getWeather);
